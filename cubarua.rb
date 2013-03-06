@@ -7,8 +7,10 @@ require 'active_record'
 require 'sqlite3' # this should be required only on dev.
 require 'rack/contrib/jsonp'
 require './models.rb'
+require './lib.rb'
 
 Cuba.use Rack::JSONP
+# Cuba.plugin Cuba::Render + res.write render("home.haml", content: "hello, world")
 
 # Put in helper file?
 def sanitize(sql_query)
@@ -18,7 +20,7 @@ end
 Cuba.define do
   on get do
     on root do
-      res.write "Hello Puerto Rico!"
+      res.write "Hello Puerto Rico!" + Cuba.settings
     end
     on "all" do
       res.write Agency.all.to_json
@@ -39,6 +41,9 @@ Cuba.define do
       # puts "Search ?q= Query: #{query[0..22]} Sanitized: #{q} At #{Time.now}"
       agency_name_search_results = Agency.where('lower(agency_name) LIKE ?', q)
       res.write agency_name_search_results.to_json     
+    end
+    on default do 
+      # res.write render("home.haml", content: "hello, world")
     end    
   end
 end

@@ -1,9 +1,13 @@
 !!!5
-%script{
-  :type => "text/javascript",
-  :src => "#{@javascript_filename}"
-}
-
-
-
-:markdown
+%html
+  %head
+    %title{:name => "Registro único de agencias", :content => " "}
+    %meta{:name => "Registro único de agencias", :content => " "}
+    %link{:href =>"bootstrap/css/bootstrap.min.css", :rel => "stylesheet", :media => "screen"}
+    %script{:type => "text/javascript", :src => "bootstrap/js/bootstrap.min.js"}
+    %body
+      .container
+        %form{:class => "form"}
+        %input{:type=> "text", :class=> "input-block-level", :placeholder=> "buscar por nombre de agencia"}
+        %button{:class => "btn btn-large btn-primary",  :type=>"submit"} Buscar por nombre
+      

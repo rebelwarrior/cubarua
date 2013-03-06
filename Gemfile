@@ -4,6 +4,8 @@ gem 'rack'
 gem 'cuba'
 gem 'activerecord'
 gem 'rack-contrib'
+gem 'tilt'
+gem 'haml'
 
 
 group :development do
