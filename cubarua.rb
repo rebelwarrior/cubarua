@@ -12,15 +12,10 @@ require './lib.rb'
 Cuba.use Rack::JSONP
 # Cuba.plugin Cuba::Render + res.write render("home.haml", content: "hello, world")
 
-# Put in helper file?
-def sanitize(sql_query)
-  sql_query[0..22].downcase.split('').each.select {|w| w =~ /[a-z]|[áéíóúü]/i}.join('') 
-end
-
 Cuba.define do
   on get do
     on root do
-      res.write "Hello Puerto Rico!" + Cuba.settings
+      res.write "Hello Puerto Rico!" + Cuba.settings.to_s
     end
     on "all" do
       res.write Agency.all.to_json
@@ -42,9 +37,9 @@ Cuba.define do
       agency_name_search_results = Agency.where('lower(agency_name) LIKE ?', q)
       res.write agency_name_search_results.to_json     
     end
-    on default do 
-      # res.write render("home.haml", content: "hello, world")
-    end    
+    # on "help" do #What Am I missing for render?
+    #      res.write render("./public/home.haml") #, content: "hello, world")
+    #    end    
   end
 end
 
