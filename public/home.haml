@@ -5,7 +5,7 @@
     %title{:name => "Registro Único de agencias", :content => " "}
     %link{:href =>"bootstrap/css/bootstrap.min.css", :rel => "stylesheet", :media => "screen"}
     %link{:href =>"css/flick/jquery-ui-1.9.1.custom.css", :rel => "stylesheet", :media => "screen"}
-    %script{:type => "text/javascript", :src => "bootstrap/js/bootstrap.min.js"}
+    / %script{:type => "text/javascript", :src => "bootstrap/js/bootstrap.min.js"}
     %script{:type => "text/javascript", :src => "//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" }
     %script{:type => "text/javascript", :src => "//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js" }
     %script{:type => "text/javascript", :src => "js/coffee-script.js"}
@@ -17,7 +17,8 @@
           %input{:type=> "text", :class=> "input-block-level", :placeholder=> "entre el nombre aproximado de la agencia."}
           %button#open{:class => "btn btn-large btn-primary",  :type=>"submit"} Buscar por Nombre de Agencia
       
-      #dialog
+      #dialog{:Title => "Listado De Agencias"}
         #results
-          Agencias: 
+          Resultados:
+          %br
           

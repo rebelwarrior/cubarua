@@ -16,10 +16,10 @@ Cuba.plugin Cuba::Render
 Cuba.define do
   on get do
     on root do
-      res.write "Hello Puerto Rico!" + Cuba.settings.to_s
+      res.write "Hello Puerto Rico!\n <br />" + Cuba.settings.to_s + "<br />" + res.headers.to_s
     end
     on "api/v1" do
-      
+      res['Content-Type'] = "application/javascript; charset=utf-8"
       on "all" do
         on param('callback') do |callback|
           json = Agency.all.to_json
@@ -30,11 +30,13 @@ Cuba.define do
         res.write Agency.all.to_json
       end
       on "id/:id" do |id|
-        agency_ref_number_json = Agency.find_by_ref_number(id).to_json
-        # on param('callback') do |callback|
-        #           response = callback ? "#{callback}(#{agency_ref_number_json})" : agency_ref_number_json
-        #         end
-        res.write agency_ref_number_json
+        # json = Agency.find_by_ref_number(id).to_json
+        on param('callback') do |callback, json|
+          json = Agency.find_by_ref_number(id).to_json
+          res.write "#{callback}(#{json})"
+        end
+        res.write Agency.find_by_ref_number(id).to_json
+        # res.write json
       end
       on "search/:query" do |query|
         q = "%#{sanitize(query)}%"
