@@ -19,20 +19,22 @@ Cuba.define do
       res.write "Hello Puerto Rico!" + Cuba.settings.to_s
     end
     on "api/v1" do
-      on "all", param('callback') do
-        if param('callback')
-          puts "___________________"
-          puts param('callback')
-          puts "-------------------"
-          res.write (param('callback')['json' => Agency.all.to_json])     
-        else
-          res.write Agency.all.to_a.to_json
+      
+      on "all" do
+        on param('callback') do |callback|
+          json = Agency.all.to_json
+          # content_type(callback ? :js : json) 
+          response = callback ? "#{callback}(#{json})" : json
+          res.write response
         end
-        # res.write render(Agency.all.to_json, :callback => params[:callback])
+        res.write Agency.all.to_json
       end
       on "id/:id" do |id|
-        agency_ref_number = Agency.find_by_ref_number(id)
-        res.write agency_ref_number.to_json
+        agency_ref_number_json = Agency.find_by_ref_number(id).to_json
+        # on param('callback') do |callback|
+        #           response = callback ? "#{callback}(#{agency_ref_number_json})" : agency_ref_number_json
+        #         end
+        res.write agency_ref_number_json
       end
       on "search/:query" do |query|
         q = "%#{sanitize(query)}%"
