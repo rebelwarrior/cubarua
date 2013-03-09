@@ -14,12 +14,11 @@ $ ->
         error: (data, status, jqXHR)-> console.log("error: #{status}, loading JSON: #{data}, and: #{jqXHR}")
         success: (incomming_data, status, xhr)->
           console?.log("success!: #{incomming_data[0]}, #{status}, #{xhr}")
-          for value in incomming_data
-            console?.log value
-            for content in value
-              console?.log content
           for agency in incomming_data
-            $('#results').append "<li>" + $.parseJSON(agency['agency'][0]) + " </li>"   
+            $('#results').append "<ol>"
+            for own key, value of agency['agency'] when key isnt 'id' #object
+              $('#results').append "<li>" + key + " : <br/>    " + value + " </li>" 
+            $('#results').append "</ol>"  
     close : ->
       $('#results').html "Agencias: <br/>"
       console?.log "Reset Window Content: #{$('div#content').contents()}"
