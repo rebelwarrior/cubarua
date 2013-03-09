@@ -2,23 +2,32 @@
 # encoding: utf-8
 # CubaRua.rb
 
-require 'cuba'
-require 'active_record'
-require 'sqlite3' # this should be required only on dev.
-require 'rack/contrib/jsonp'
-require './models.rb'
-require './lib.rb'
+%w[cuba cuba/render active_record sqlite3 rack/contrib/jsonp].each do |lib|
+  require lib
+end
+%w[models.rb lib.rb].each do |file|
+  require "./#{file}"
+end
 
 Cuba.use Rack::JSONP
 # Cuba.plugin Cuba::Render + res.write render("home.haml", content: "hello, world")
+Cuba.plugin Cuba::Render
 
 Cuba.define do
   on get do
     on root do
       res.write "Hello Puerto Rico!" + Cuba.settings.to_s
     end
-    on "all" do
-      res.write Agency.all.to_json
+    on "all", param('callback') do
+      if param('callback')
+        puts "___________________"
+        puts param('callback')
+        puts "-------------------"
+        res.write (param('callback')['json' => Agency.all.to_json])     
+      else
+        res.write Agency.all.to_a.to_json
+      end
+      # res.write render(Agency.all.to_json, :callback => params[:callback])
     end
     on "id/:id" do |id|
       agency_ref_number = Agency.find_by_ref_number(id)
@@ -37,9 +46,9 @@ Cuba.define do
       agency_name_search_results = Agency.where('lower(agency_name) LIKE ?', q)
       res.write agency_name_search_results.to_json     
     end
-    # on "help" do #What Am I missing for render?
-    #      res.write render("./public/home.haml") #, content: "hello, world")
-    #    end    
+    on "help" do 
+      res.write render("./public/home.haml") #, content: "hello, world")
+    end    
   end
 end
 
